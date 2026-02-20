@@ -537,6 +537,7 @@
   .holding-card:hover { background: var(--bg3); }
   .holding-card:hover::before { opacity: 1; }
   .holding-card:hover .holding-arrow { opacity: 1; transform: translateX(0); }
+  .holding-card.hidden-card { display: none; }
 
   .holding-category {
     font-family: var(--mono);
@@ -1119,7 +1120,7 @@
       <div class="pillar">
         <div class="pillar-icon">01 //</div>
         <div class="pillar-title">Digital Assets</div>
-        <div class="pillar-desc">Long-horizon positions in BTC, Layer 1s, DeFi, gaming, and NFTs across market cycles.</div>
+        <div class="pillar-desc">Long-horizon positions in BTC, Layer 1s, DeFi, RWA, and NFTs across market cycles.</div>
       </div>
       <div class="pillar">
         <div class="pillar-icon">02 //</div>
@@ -1152,14 +1153,14 @@
       <button class="filter-tab" data-filter="btc">BTC</button>
       <button class="filter-tab" data-filter="layer1">Layer 1</button>
       <button class="filter-tab" data-filter="defi">DeFi / Apps</button>
-      <button class="filter-tab" data-filter="gaming">Gaming</button>
-      <button class="filter-tab" data-filter="nfts">NFTs</button>
       <button class="filter-tab" data-filter="ai">AI / Infra</button>
+      <button class="filter-tab" data-filter="rwa">RWA</button>
+      <button class="filter-tab" data-filter="nfts">NFTs</button>
     </div>
   </div>
 
   <div class="holdings-grid" id="holdingsGrid">
-    <a class="holding-card" href="#" data-category="btc">
+    <a class="holding-card" href="https://bitcoin.org" target="_blank" data-category="btc">
       <div class="holding-category">BTC</div>
       <div class="holding-name">Bitcoin</div>
       <div class="holding-tagline">Sovereign monetary network. Digital gold with a fixed supply of 21M.</div>
@@ -1168,43 +1169,79 @@
     <a class="holding-card" href="https://solana.com" target="_blank" data-category="layer1">
       <div class="holding-category">Layer 1</div>
       <div class="holding-name">Solana</div>
-      <div class="holding-tagline">Increase bandwidth. Reduce latency. The high-performance chain.</div>
+      <div class="holding-tagline">High-performance chain built for speed, scale, and sub-penny transactions.</div>
       <div class="holding-arrow">→</div>
     </a>
-    <a class="holding-card" href="https://ethereum.org" target="_blank" data-category="layer1">
+    <a class="holding-card" href="https://sui.io" target="_blank" data-category="layer1">
       <div class="holding-category">Layer 1</div>
-      <div class="holding-name">Ethereum</div>
-      <div class="holding-tagline">Programmable settlement layer. The base layer for global DeFi.</div>
+      <div class="holding-name">Sui</div>
+      <div class="holding-tagline">Next-gen Layer 1 with parallel execution and object-centric architecture.</div>
       <div class="holding-arrow">→</div>
     </a>
-    <a class="holding-card" href="#" data-category="defi">
+    <a class="holding-card" href="https://hyperliquid.xyz" target="_blank" data-category="defi">
       <div class="holding-category">DeFi / Apps</div>
-      <div class="holding-name">Uniswap</div>
-      <div class="holding-tagline">Permissionless liquidity. The largest decentralized exchange by volume.</div>
+      <div class="holding-name">HyperLiquid</div>
+      <div class="holding-tagline">On-chain perpetuals exchange delivering CEX-grade speed with full decentralization.</div>
       <div class="holding-arrow">→</div>
     </a>
-    <a class="holding-card" href="#" data-category="ai">
+    <a class="holding-card" href="https://rendernetwork.com" target="_blank" data-category="ai">
       <div class="holding-category">AI / Infra</div>
-      <div class="holding-name">NVIDIA</div>
-      <div class="holding-tagline">The picks-and-shovels play for the AI computing revolution.</div>
+      <div class="holding-name">Render</div>
+      <div class="holding-tagline">Decentralized GPU rendering network powering AI, gaming, and visual compute.</div>
       <div class="holding-arrow">→</div>
     </a>
-    <a class="holding-card" href="#" data-category="gaming">
-      <div class="holding-category">Gaming</div>
-      <div class="holding-name">Immutable</div>
-      <div class="holding-tagline">Building the infrastructure rails for onchain gaming at scale.</div>
+    <a class="holding-card" href="https://doublezero.xyz" target="_blank" data-category="ai">
+      <div class="holding-category">AI / Infra</div>
+      <div class="holding-name">DoubleZero</div>
+      <div class="holding-tagline">High-performance networking infrastructure for low-latency blockchain communication.</div>
       <div class="holding-arrow">→</div>
     </a>
-    <a class="holding-card" href="#" data-category="nfts">
+    <a class="holding-card" href="https://www.txn.com" target="_blank" data-category="ai">
+      <div class="holding-category">AI / Infra</div>
+      <div class="holding-name">TXN</div>
+      <div class="holding-tagline">Infrastructure layer enabling scalable transaction processing for the decentralized web.</div>
+      <div class="holding-arrow">→</div>
+    </a>
+    <a class="holding-card" href="https://www.corescientific.com" target="_blank" data-category="ai">
+      <div class="holding-category">AI / Infra</div>
+      <div class="holding-name">CORZ</div>
+      <div class="holding-tagline">Core Scientific — leading digital infrastructure for blockchain and high-performance compute.</div>
+      <div class="holding-arrow">→</div>
+    </a>
+    <a class="holding-card hidden-card" href="https://www.tesla.com" target="_blank" data-category="ai">
+      <div class="holding-category">AI / Infra</div>
+      <div class="holding-name">TSLA</div>
+      <div class="holding-tagline">Tesla — AI-driven energy and autonomy at the intersection of compute and physical infrastructure.</div>
+      <div class="holding-arrow">→</div>
+    </a>
+    <a class="holding-card hidden-card" href="https://www.galaxy.com" target="_blank" data-category="ai">
+      <div class="holding-category">AI / Infra</div>
+      <div class="holding-name">GLXY</div>
+      <div class="holding-tagline">Galaxy Digital — institutional-grade digital asset management and blockchain infrastructure.</div>
+      <div class="holding-arrow">→</div>
+    </a>
+    <a class="holding-card hidden-card" href="https://www.circle.com" target="_blank" data-category="rwa">
+      <div class="holding-category">RWA</div>
+      <div class="holding-name">CRCL</div>
+      <div class="holding-tagline">Circle — bridging traditional finance and crypto through USDC and real-world asset tokenization.</div>
+      <div class="holding-arrow">→</div>
+    </a>
+    <a class="holding-card hidden-card" href="https://solanamonkeybusiness.com" target="_blank" data-category="nfts">
       <div class="holding-category">NFTs</div>
-      <div class="holding-name">Digital Collectibles</div>
-      <div class="holding-tagline">Select positions in culturally significant NFT collections and platforms.</div>
+      <div class="holding-name">Solana Monkey Business</div>
+      <div class="holding-tagline">OG Solana NFT collection — culturally iconic digital collectibles with deep community roots.</div>
       <div class="holding-arrow">→</div>
     </a>
-    <a class="holding-card" href="#" data-category="ai">
-      <div class="holding-category">AI / Infra</div>
-      <div class="holding-name">Energy Infra</div>
-      <div class="holding-tagline">Long-term exposure to power infrastructure enabling the AI transition.</div>
+    <a class="holding-card hidden-card" href="https://www.larvalabs.com/cryptopunks" target="_blank" data-category="nfts">
+      <div class="holding-category">NFTs</div>
+      <div class="holding-name">CryptoPunks</div>
+      <div class="holding-tagline">The original 10K generative art project — foundational NFT collection on Ethereum.</div>
+      <div class="holding-arrow">→</div>
+    </a>
+    <a class="holding-card hidden-card" href="https://jup.ag" target="_blank" data-category="defi">
+      <div class="holding-category">DeFi / Apps</div>
+      <div class="holding-name">Jupiter</div>
+      <div class="holding-tagline">Solana's leading DEX aggregator — routing engine for optimal on-chain swaps.</div>
       <div class="holding-arrow">→</div>
     </a>
   </div>
@@ -1329,26 +1366,29 @@
     <p class="contact-body">
       We are not raising capital. If you are building something at the frontier of technology and believe there is a fit with our thesis, we want to hear from you.
     </p>
-    <a href="mailto:hello@redoakdigital.financial" class="contact-email">
-      hello@redoakdigital.financial →
+    <a href="mailto:contact@redoakdigital.xyz" class="contact-email">
+      contact@redoakdigital.xyz →
     </a>
   </div>
   <div class="contact-right reveal reveal-delay-1">
-    <div class="contact-form">
+    <form class="contact-form" id="contactForm" action="https://formsubmit.co/contact@redoakdigital.xyz" method="POST">
+      <input type="hidden" name="_subject" value="New message from Red Oak Digital website">
+      <input type="hidden" name="_captcha" value="false">
+      <input type="hidden" name="_next" value="">
       <div class="form-field">
-        <input type="text" placeholder="Your name">
+        <input type="text" name="name" placeholder="Your name" required>
       </div>
       <div class="form-field">
-        <input type="email" placeholder="Email address">
+        <input type="email" name="email" placeholder="Email address" required>
       </div>
       <div class="form-field">
-        <input type="text" placeholder="Company / Project (optional)">
+        <input type="text" name="company" placeholder="Company / Project (optional)">
       </div>
       <div class="form-field">
-        <textarea placeholder="Tell us about what you're building..."></textarea>
+        <textarea name="message" placeholder="Tell us about what you're building..." required></textarea>
       </div>
-      <button class="form-submit">Send Message →</button>
-    </div>
+      <button type="submit" class="form-submit">Send Message →</button>
+    </form>
   </div>
 </section>
 
@@ -1368,7 +1408,7 @@
   <div class="footer-copy">© 2025 Red Oak Digital. All rights reserved.</div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   // Scroll reveal
   const reveals = document.querySelectorAll('.reveal');
   const observer = new IntersectionObserver((entries) => {
@@ -1392,10 +1432,20 @@
 
       const filter = tab.dataset.filter;
       cards.forEach(card => {
-        if (filter === 'all' || card.dataset.category === filter) {
-          card.style.display = 'block';
+        if (filter === 'all') {
+          // For "All", only show non-hidden cards (first 8)
+          if (card.classList.contains('hidden-card')) {
+            card.style.display = 'none';
+          } else {
+            card.style.display = '';
+          }
         } else {
-          card.style.display = 'none';
+          // For specific category, show ALL matching cards including hidden ones
+          if (card.dataset.category === filter) {
+            card.style.display = '';
+          } else {
+            card.style.display = 'none';
+          }
         }
       });
     });
