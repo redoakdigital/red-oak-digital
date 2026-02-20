@@ -161,20 +161,67 @@
     border-bottom: 1px solid var(--border);
   }
 
-  /* Android eye SVG canvas */
+  /* Cyborg eye canvas */
   .eye-canvas {
     position: absolute;
-    right: 0;
-    top: 0;
+    right: -5%;
+    top: 50%;
+    transform: translateY(-50%);
     width: 55%;
-    height: 100%;
-    opacity: 0.18;
+    max-width: 700px;
+    aspect-ratio: 1;
     pointer-events: none;
+    opacity: 0;
+    animation: eyeFadeIn 2s 0.5s forwards;
+  }
+
+  @keyframes eyeFadeIn {
+    from { opacity: 0; transform: translateY(-50%) scale(0.95); }
+    to { opacity: 1; transform: translateY(-50%) scale(1); }
   }
 
   .eye-canvas svg {
     width: 100%;
     height: 100%;
+    filter: drop-shadow(0 0 40px rgba(192,57,43,0.15));
+  }
+
+  /* Rotation animations */
+  @keyframes spinCW { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  @keyframes spinCCW { from { transform: rotate(0deg); } to { transform: rotate(-360deg); } }
+  @keyframes irisOpen {
+    0% { transform: scale(0.3); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  @keyframes pupilDrift {
+    0%, 100% { transform: translate(0, 0); }
+    15% { transform: translate(8px, -5px); }
+    30% { transform: translate(-4px, 6px); }
+    50% { transform: translate(6px, 3px); }
+    70% { transform: translate(-7px, -4px); }
+    85% { transform: translate(3px, 7px); }
+  }
+  @keyframes scanLine {
+    0% { transform: translateY(-120px); opacity: 0; }
+    10% { opacity: 0.6; }
+    90% { opacity: 0.6; }
+    100% { transform: translateY(120px); opacity: 0; }
+  }
+  @keyframes dataPulse {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 0.6; }
+  }
+  @keyframes pupilGlow {
+    0%, 100% { filter: drop-shadow(0 0 6px rgba(192,57,43,0.6)); }
+    50% { filter: drop-shadow(0 0 18px rgba(192,57,43,1)); }
+  }
+  @keyframes ringPulse {
+    0%, 100% { opacity: 0.15; r: 300; }
+    50% { opacity: 0.25; r: 304; }
+  }
+  @keyframes tickFlash {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.7; }
   }
 
   /* Red glow orb */
@@ -1013,40 +1060,162 @@
 
 <!-- ENTRANCE -->
 <section class="entrance">
-  <!-- Android eye SVG -->
+  <!-- Animated Cyborg Eye -->
   <div class="eye-canvas">
     <svg viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg">
-      <!-- Outer glow ring -->
-      <circle cx="400" cy="400" r="300" fill="none" stroke="#C0392B" stroke-width="0.5" opacity="0.3"/>
-      <circle cx="400" cy="400" r="280" fill="none" stroke="#C0392B" stroke-width="0.3" opacity="0.2"/>
-      <!-- Eye shape -->
-      <ellipse cx="400" cy="400" rx="220" ry="140" fill="none" stroke="#C0392B" stroke-width="1.5" opacity="0.8"/>
-      <!-- Iris -->
-      <circle cx="400" cy="400" r="90" fill="none" stroke="#C0392B" stroke-width="1" opacity="0.7"/>
-      <!-- Inner iris rings -->
-      <circle cx="400" cy="400" r="70" fill="none" stroke="#C0392B" stroke-width="0.5" opacity="0.5"/>
-      <circle cx="400" cy="400" r="50" fill="none" stroke="#C0392B" stroke-width="0.5" opacity="0.4"/>
-      <!-- Pupil -->
-      <circle cx="400" cy="400" r="28" fill="#C0392B" opacity="0.5"/>
-      <circle cx="400" cy="400" r="16" fill="#C0392B" opacity="0.8"/>
-      <!-- Scan lines through iris -->
-      <line x1="316" y1="400" x2="484" y2="400" stroke="#C0392B" stroke-width="0.4" opacity="0.4"/>
-      <line x1="400" y1="316" x2="400" y2="484" stroke="#C0392B" stroke-width="0.4" opacity="0.4"/>
-      <!-- Eye corner connectors -->
-      <line x1="180" y1="400" x2="316" y2="400" stroke="#C0392B" stroke-width="0.5" opacity="0.3"/>
-      <line x1="484" y1="400" x2="620" y2="400" stroke="#C0392B" stroke-width="0.5" opacity="0.3"/>
-      <!-- Eyelashes / lashes detail -->
-      <line x1="260" y1="330" x2="270" y2="360" stroke="#C0392B" stroke-width="0.5" opacity="0.3"/>
-      <line x1="310" y1="298" x2="318" y2="328" stroke="#C0392B" stroke-width="0.5" opacity="0.3"/>
-      <line x1="370" y1="280" x2="372" y2="312" stroke="#C0392B" stroke-width="0.5" opacity="0.3"/>
-      <line x1="430" y1="280" x2="428" y2="312" stroke="#C0392B" stroke-width="0.5" opacity="0.3"/>
-      <line x1="490" y1="298" x2="482" y2="328" stroke="#C0392B" stroke-width="0.5" opacity="0.3"/>
-      <line x1="540" y1="330" x2="530" y2="360" stroke="#C0392B" stroke-width="0.5" opacity="0.3"/>
-      <!-- Grid lines around -->
-      <line x1="0" y1="400" x2="150" y2="400" stroke="#C0392B" stroke-width="0.3" opacity="0.15"/>
-      <line x1="650" y1="400" x2="800" y2="400" stroke="#C0392B" stroke-width="0.3" opacity="0.15"/>
-      <!-- Corner accents -->
-      <g opacity="0.2">
+      <defs>
+        <radialGradient id="pupilGrad" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#ff4136" stop-opacity="1"/>
+          <stop offset="40%" stop-color="#C0392B" stop-opacity="0.9"/>
+          <stop offset="100%" stop-color="#C0392B" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="irisGrad" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#C0392B" stop-opacity="0.15"/>
+          <stop offset="70%" stop-color="#C0392B" stop-opacity="0.05"/>
+          <stop offset="100%" stop-color="transparent"/>
+        </radialGradient>
+        <filter id="glow">
+          <feGaussianBlur stdDeviation="3" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="glowStrong">
+          <feGaussianBlur stdDeviation="6" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+
+      <!-- Outer pulsing detection ring -->
+      <circle cx="400" cy="400" r="300" fill="none" stroke="#C0392B" stroke-width="0.5" opacity="0.15">
+        <animate attributeName="r" values="298;304;298" dur="4s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.15;0.28;0.15" dur="4s" repeatCount="indefinite"/>
+      </circle>
+
+      <!-- Outer mechanical housing - slow CW rotation -->
+      <g style="transform-origin:400px 400px; animation: spinCW 120s linear infinite;">
+        <!-- Housing ring -->
+        <circle cx="400" cy="400" r="260" fill="none" stroke="#C0392B" stroke-width="1.2" opacity="0.25"/>
+        <!-- Tick marks around housing -->
+        <g opacity="0.3">
+          <line x1="400" y1="138" x2="400" y2="148" stroke="#C0392B" stroke-width="1.5"/>
+          <line x1="400" y1="652" x2="400" y2="662" stroke="#C0392B" stroke-width="1.5"/>
+          <line x1="138" y1="400" x2="148" y2="400" stroke="#C0392B" stroke-width="1.5"/>
+          <line x1="652" y1="400" x2="662" y2="400" stroke="#C0392B" stroke-width="1.5"/>
+          <!-- 45-degree ticks -->
+          <line x1="216" y1="216" x2="223" y2="223" stroke="#C0392B" stroke-width="1"/>
+          <line x1="577" y1="216" x2="584" y2="223" stroke="#C0392B" stroke-width="1"/>
+          <line x1="216" y1="584" x2="223" y2="577" stroke="#C0392B" stroke-width="1"/>
+          <line x1="577" y1="584" x2="584" y2="577" stroke="#C0392B" stroke-width="1"/>
+        </g>
+        <!-- Gear teeth notches -->
+        <g opacity="0.2">
+          <rect x="395" y="132" width="10" height="16" rx="1" fill="#C0392B"/>
+          <rect x="395" y="652" width="10" height="16" rx="1" fill="#C0392B"/>
+          <rect x="132" y="395" width="16" height="10" rx="1" fill="#C0392B"/>
+          <rect x="652" y="395" width="16" height="10" rx="1" fill="#C0392B"/>
+        </g>
+      </g>
+
+      <!-- Inner mechanical ring - slow CCW rotation -->
+      <g style="transform-origin:400px 400px; animation: spinCCW 90s linear infinite;">
+        <circle cx="400" cy="400" r="220" fill="none" stroke="#C0392B" stroke-width="0.6" opacity="0.2" stroke-dasharray="8 12"/>
+        <!-- Small data notches -->
+        <g opacity="0.25">
+          <rect x="397" y="176" width="6" height="10" rx="1" fill="#C0392B"/>
+          <rect x="397" y="614" width="6" height="10" rx="1" fill="#C0392B"/>
+          <rect x="176" y="397" width="10" height="6" rx="1" fill="#C0392B"/>
+          <rect x="614" y="397" width="10" height="6" rx="1" fill="#C0392B"/>
+        </g>
+      </g>
+
+      <!-- Eye shape / aperture blades -->
+      <g filter="url(#glow)" style="animation: irisOpen 1.5s 0.8s both ease-out;">
+        <!-- Upper eyelid -->
+        <path d="M160,400 Q280,260 400,240 Q520,260 640,400" fill="none" stroke="#C0392B" stroke-width="2" opacity="0.8"/>
+        <!-- Lower eyelid -->
+        <path d="M160,400 Q280,540 400,560 Q520,540 640,400" fill="none" stroke="#C0392B" stroke-width="2" opacity="0.8"/>
+        <!-- Secondary eyelid lines -->
+        <path d="M185,400 Q290,280 400,262 Q510,280 615,400" fill="none" stroke="#C0392B" stroke-width="0.6" opacity="0.3"/>
+        <path d="M185,400 Q290,520 400,538 Q510,520 615,400" fill="none" stroke="#C0392B" stroke-width="0.6" opacity="0.3"/>
+        <!-- Corner mechanical joints -->
+        <circle cx="160" cy="400" r="4" fill="none" stroke="#C0392B" stroke-width="1" opacity="0.5"/>
+        <circle cx="640" cy="400" r="4" fill="none" stroke="#C0392B" stroke-width="1" opacity="0.5"/>
+        <line x1="100" y1="400" x2="154" y2="400" stroke="#C0392B" stroke-width="0.5" opacity="0.3"/>
+        <line x1="646" y1="400" x2="700" y2="400" stroke="#C0392B" stroke-width="0.5" opacity="0.3"/>
+      </g>
+
+      <!-- Iris detail ring - medium CW rotation -->
+      <g style="transform-origin:400px 400px; animation: spinCW 60s linear infinite;">
+        <circle cx="400" cy="400" r="110" fill="none" stroke="#C0392B" stroke-width="0.8" opacity="0.35"/>
+        <!-- Iris segment lines -->
+        <line x1="400" y1="290" x2="400" y2="302" stroke="#C0392B" stroke-width="0.5" opacity="0.4"/>
+        <line x1="400" y1="498" x2="400" y2="510" stroke="#C0392B" stroke-width="0.5" opacity="0.4"/>
+        <line x1="290" y1="400" x2="302" y2="400" stroke="#C0392B" stroke-width="0.5" opacity="0.4"/>
+        <line x1="498" y1="400" x2="510" y2="400" stroke="#C0392B" stroke-width="0.5" opacity="0.4"/>
+        <!-- Diagonal segments -->
+        <line x1="322" y1="322" x2="330" y2="330" stroke="#C0392B" stroke-width="0.5" opacity="0.3"/>
+        <line x1="470" y1="322" x2="478" y2="330" stroke="#C0392B" stroke-width="0.5" opacity="0.3"/>
+        <line x1="322" y1="478" x2="330" y2="470" stroke="#C0392B" stroke-width="0.5" opacity="0.3"/>
+        <line x1="470" y1="478" x2="478" y2="470" stroke="#C0392B" stroke-width="0.5" opacity="0.3"/>
+      </g>
+
+      <!-- Inner iris ring -->
+      <circle cx="400" cy="400" r="80" fill="none" stroke="#C0392B" stroke-width="0.5" opacity="0.25"/>
+
+      <!-- Iris fill glow -->
+      <circle cx="400" cy="400" r="100" fill="url(#irisGrad)" opacity="0.6"/>
+
+      <!-- Pupil group with drift animation -->
+      <g style="animation: pupilDrift 12s ease-in-out infinite;" filter="url(#glowStrong)">
+        <!-- Outer pupil glow -->
+        <circle cx="400" cy="400" r="38" fill="url(#pupilGrad)" opacity="0.4">
+          <animate attributeName="r" values="36;42;36" dur="3s" repeatCount="indefinite"/>
+        </circle>
+        <!-- Core pupil -->
+        <circle cx="400" cy="400" r="22" fill="#C0392B" opacity="0.9">
+          <animate attributeName="opacity" values="0.85;1;0.85" dur="2s" repeatCount="indefinite"/>
+        </circle>
+        <!-- Inner pupil hot center -->
+        <circle cx="400" cy="400" r="10" fill="#ff4136" opacity="0.95"/>
+        <!-- Pupil highlight -->
+        <circle cx="393" cy="393" r="4" fill="#fff" opacity="0.25"/>
+      </g>
+
+      <!-- Crosshair overlay -->
+      <g opacity="0.15">
+        <line x1="340" y1="400" x2="370" y2="400" stroke="#C0392B" stroke-width="0.8"/>
+        <line x1="430" y1="400" x2="460" y2="400" stroke="#C0392B" stroke-width="0.8"/>
+        <line x1="400" y1="340" x2="400" y2="370" stroke="#C0392B" stroke-width="0.8"/>
+        <line x1="400" y1="430" x2="400" y2="460" stroke="#C0392B" stroke-width="0.8"/>
+      </g>
+
+      <!-- Scanning line -->
+      <g style="animation: scanLine 4s ease-in-out infinite;" opacity="0">
+        <line x1="310" y1="400" x2="490" y2="400" stroke="#C0392B" stroke-width="1" opacity="0.5"/>
+        <line x1="320" y1="400" x2="480" y2="400" stroke="#ff4136" stroke-width="0.3" opacity="0.8"/>
+      </g>
+
+      <!-- HUD corner brackets -->
+      <g opacity="0.12" style="animation: dataPulse 5s ease-in-out infinite;">
+        <!-- Top-left bracket -->
+        <polyline points="270,270 270,295 295,295" fill="none" stroke="#C0392B" stroke-width="1"/>
+        <!-- Top-right bracket -->
+        <polyline points="530,270 530,295 505,295" fill="none" stroke="#C0392B" stroke-width="1"/>
+        <!-- Bottom-left bracket -->
+        <polyline points="270,530 270,505 295,505" fill="none" stroke="#C0392B" stroke-width="1"/>
+        <!-- Bottom-right bracket -->
+        <polyline points="530,530 530,505 505,505" fill="none" stroke="#C0392B" stroke-width="1"/>
+      </g>
+
+      <!-- HUD data text -->
+      <g font-family="'JetBrains Mono', monospace" font-size="8" fill="#C0392B">
+        <text x="275" y="286" opacity="0.2" style="animation: dataPulse 4s 1s ease-in-out infinite;">SCAN:ACTIVE</text>
+        <text x="485" y="286" opacity="0.2" style="animation: dataPulse 4s 2s ease-in-out infinite;">SYS:OK</text>
+        <text x="275" y="525" opacity="0.2" style="animation: dataPulse 4s 0.5s ease-in-out infinite;">LOCK:ON</text>
+        <text x="495" y="525" opacity="0.2" style="animation: dataPulse 4s 1.5s ease-in-out infinite;">IR:97%</text>
+      </g>
+
+      <!-- Outer corner accents -->
+      <g opacity="0.1">
         <polyline points="50,50 50,100 100,100" fill="none" stroke="#C0392B" stroke-width="1"/>
         <polyline points="750,50 750,100 700,100" fill="none" stroke="#C0392B" stroke-width="1"/>
         <polyline points="50,750 50,700 100,700" fill="none" stroke="#C0392B" stroke-width="1"/>
@@ -1463,7 +1632,7 @@
         if (response.ok) {
           alert('Message sent! We will be in touch.');
           this.reset();
-        } else {
+           } else {
           alert('Something went wrong. Please try again or email us directly.');
         }
       }).catch(() => {
@@ -1473,4 +1642,4 @@
   }
 </script>
 </body>
-</html> 
+</html>
