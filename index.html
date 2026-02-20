@@ -164,11 +164,11 @@
   /* Cyborg eye canvas */
   .eye-canvas {
     position: absolute;
-    right: -5%;
+    right: 10%;
     top: 50%;
     transform: translateY(-50%);
-    width: 55%;
-    max-width: 700px;
+    width: 45%;
+    max-width: 600px;
     aspect-ratio: 1;
     pointer-events: none;
     opacity: 0;
@@ -1632,7 +1632,7 @@
         if (response.ok) {
           alert('Message sent! We will be in touch.');
           this.reset();
-           } else {
+        } else {
           alert('Something went wrong. Please try again or email us directly.');
         }
       }).catch(() => {
@@ -1643,3 +1643,4 @@
 </script>
 </body>
 </html>
+      
