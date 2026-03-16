@@ -1489,14 +1489,45 @@ async function loadInsights() {
   const container = document.getElementById('insights-container');
   container.innerHTML = '<div class="insight-card" style="grid-column: span 3; text-align:center; padding:60px;"><span style="color:var(--red);">Loading latest velocity...</span></div>';
 
+  // FUTURE: swap to https://read.redoakdigital.financial/feed once custom domain is active
+  const feedUrl = 'https://redoakdigital.substack.com/feed';
+
+  // Multiple proxy strategies — try each until one works
+  const fetchStrategies = [
+    // 1. Direct fetch (works if Substack allows CORS from your domain)
+    () => fetch(feedUrl),
+    // 2. allorigins JSON wrapper (more reliable than /raw)
+    async () => {
+      const r = await fetch('https://api.allorigins.win/get?url=' + encodeURIComponent(feedUrl));
+      const json = await r.json();
+      return new Response(json.contents, { status: 200 });
+    },
+    // 3. corsproxy.io
+    () => fetch('https://corsproxy.io/?' + encodeURIComponent(feedUrl)),
+    // 4. allorigins raw
+    () => fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent(feedUrl)),
+  ];
+
+  let text = null;
+  for (const strategy of fetchStrategies) {
+    try {
+      const res = await strategy();
+      if (!res.ok) continue;
+      text = await res.text();
+      // Quick sanity check — does it look like RSS XML?
+      if (text.includes('<item>') || text.includes('<item ')) break;
+      text = null; // Not valid RSS, try next
+    } catch (e) {
+      continue;
+    }
+  }
+
+  if (!text) {
+    container.innerHTML = '<p class="insight-card" style="grid-column:span 3;text-align:center;color:var(--red);padding:60px;">Feed live in &lt; 24h.</p>';
+    return;
+  }
+
   try {
-    // Substack RSS feeds are often CORS-blocked from browsers.
-    // Route through a public CORS proxy to guarantee reliable fetch.
-    const feedUrl = 'https://redoakdigital.substack.com/feed'; // FUTURE: swap to https://read.redoakdigital.financial/feed once custom domain is active
-    const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(feedUrl);
-    const res = await fetch(proxyUrl);
-    if (!res.ok) throw new Error('Feed fetch failed');
-    const text = await res.text();
     const parser = new DOMParser();
     const xml = parser.parseFromString(text, 'text/xml');
     const items = Array.from(xml.querySelectorAll('item')).slice(0, 6);
