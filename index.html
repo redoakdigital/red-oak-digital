@@ -1466,61 +1466,90 @@
   </div>
 </section>
 
-<!-- INSIGHTS -->
+<!-- === RED OAK DYNAMIC RESEARCH & THESIS SECTION === -->
 <section class="insights" id="insights">
   <div class="insights-header reveal">
     <div>
       <div class="section-tag">Research &amp; Insights</div>
       <h2 class="section-title">Weekly briefs.<br><em>Monthly outlooks.</em></h2>
     </div>
-    <a href="https://read.redoakdigital.financial/" target="_blank" class="insights-link">
-      Read on Substack →
+    <a href="https://redoakdigital.substack.com/" target="_blank" class="insights-link">
+      All Thesis on Substack →
     </a>
   </div>
 
-  <div class="insights-grid">
-    <a href="https://read.redoakdigital.financial/" target="_blank" class="insight-card insight-card-large reveal">
-      <div>
-        <div class="insight-meta">
-          <span class="insight-type">Monthly Outlook</span>
-          <span class="insight-date">Feb 2026</span>
-        </div>
-        <div class="insight-title">Market Outlook: AI + Crypto Convergence and What It Means for Our Portfolio</div>
-      </div>
-      <p class="insight-excerpt">Our monthly breakdown of macro conditions, digital asset positioning, and the structural shifts driving our long-term thesis across Bitcoin, Layer 1s, and AI infrastructure. Where we see asymmetric opportunity going into Q2.</p>
-    </a>
-    <a href="https://read.redoakdigital.financial/" target="_blank" class="insight-card reveal">
-      <div>
-        <div class="insight-meta">
-          <span class="insight-type">Friday Weekly</span>
-          <span class="insight-date">Feb 14, 2026</span>
-        </div>
-        <div class="insight-title">Weekly Roundup: Solana Hits New ATH, AI Infra Spend Accelerates</div>
-      </div>
-      <p class="insight-excerpt">This week in digital assets and technology: what moved, what mattered, and our read on what's coming.</p>
-    </a>
-    <a href="https://read.redoakdigital.financial/" target="_blank" class="insight-card reveal reveal-delay-1">
-      <div>
-        <div class="insight-meta">
-          <span class="insight-type">New Position</span>
-          <span class="insight-date">Jan 2026</span>
-        </div>
-        <div class="insight-title">New Acquisition: Why We Added to Our Energy Infrastructure Exposure</div>
-      </div>
-      <p class="insight-excerpt">A breakdown of our latest portfolio addition and the reasoning behind our growing conviction in physical compute infrastructure.</p>
-    </a>
-    <a href="https://read.redoakdigital.financial/" target="_blank" class="insight-card reveal reveal-delay-2">
-      <div>
-        <div class="insight-meta">
-          <span class="insight-type">Thesis</span>
-          <span class="insight-date">Dec 2025</span>
-        </div>
-        <div class="insight-title">The Validator Economy: How Jito and Helius Are Reshaping Solana</div>
-      </div>
-      <p class="insight-excerpt">Our deep dive into the validator layer and MEV infrastructure that underpins Solana's growth as an institutional-grade chain.</p>
-    </a>
+  <div id="insights-container" class="insights-grid">
+    <!-- Populated live by JS from Substack RSS -->
   </div>
 </section>
+
+<script>
+// Pure vanilla JS – Substack RSS auto-sync (zero dependencies)
+async function loadInsights() {
+  const container = document.getElementById('insights-container');
+  container.innerHTML = '<div class="insight-card" style="grid-column: span 3; text-align:center; padding:60px;"><span style="color:var(--red);">Loading latest velocity...</span></div>';
+
+  try {
+    // Substack RSS feeds are often CORS-blocked from browsers.
+    // Route through a public CORS proxy to guarantee reliable fetch.
+    const feedUrl = 'https://redoakdigital.substack.com/feed'; // FUTURE: swap to https://read.redoakdigital.financial/feed once custom domain is active
+    const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(feedUrl);
+    const res = await fetch(proxyUrl);
+    if (!res.ok) throw new Error('Feed fetch failed');
+    const text = await res.text();
+    const parser = new DOMParser();
+    const xml = parser.parseFromString(text, 'text/xml');
+    const items = Array.from(xml.querySelectorAll('item')).slice(0, 6);
+
+    if (items.length === 0) {
+      container.innerHTML = '<p class="insight-card" style="grid-column:span 3;text-align:center;color:var(--text-dim);padding:60px;">First thesis drops soon.</p>';
+      return;
+    }
+
+    let html = '';
+    items.forEach((item, i) => {
+      const title = item.querySelector('title')?.textContent || '';
+      const pubDate = new Date(item.querySelector('pubDate')?.textContent || '').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      const link = item.querySelector('link')?.textContent || '';
+      const desc = item.querySelector('description')?.textContent || '';
+      const excerpt = desc.replace(/<[^>]+>/g, '').slice(0, 160) + '…';
+
+      // First card gets the large treatment
+      const largeClass = i === 0 ? ' insight-card-large' : '';
+      const delayClass = i > 1 ? ` reveal-delay-${Math.min(i - 1, 3)}` : '';
+
+      html += `
+        <a href="${link}" target="_blank" class="insight-card${largeClass} reveal${delayClass}">
+          <div>
+            <div class="insight-meta">
+              <span class="insight-type">THESIS</span>
+              <span class="insight-date">${pubDate}</span>
+            </div>
+            <div class="insight-title">${title}</div>
+          </div>
+          <p class="insight-excerpt">${excerpt}</p>
+        </a>
+      `;
+    });
+    container.innerHTML = html;
+
+    // Re-observe new cards for scroll-reveal animation
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+    container.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  } catch (e) {
+    container.innerHTML = '<p class="insight-card" style="grid-column:span 3;text-align:center;color:var(--red);padding:60px;">Feed live in &lt; 24h.</p>';
+  }
+}
+window.addEventListener('load', loadInsights);
+</script>
 
 <!-- VALIDATORS -->
 <div class="validators reveal">
@@ -1557,8 +1586,8 @@
     <p class="contact-body">
       We are not raising capital. If you are building something at the frontier of technology and believe there is a fit with our thesis, we want to hear from you.
     </p>
-    <a href="mailto:contact@redoakdigital.xyz" class="contact-email">
-      contact@redoakdigital.xyz →
+    <a href="/cdn-cgi/l/email-protection#bfdcd0d1cbdedccbffcddadbd0ded4dbd6d8d6cbded391c7c6c5" class="contact-email">
+      <span class="__cf_email__" data-cfemail="05666a6b71646671457760616a646e616c626c7164692b7d7c7f">[email&#160;protected]</span> →
     </a>
   </div>
   <div class="contact-right reveal reveal-delay-1">
@@ -1593,13 +1622,13 @@
     <li><a href="#about">About</a></li>
     <li><a href="#holdings">Holdings</a></li>
     <li><a href="#insights">Insights</a></li>
-    <li><a href="https://read.redoakdigital.financial/" target="_blank">Substack</a></li>
+    <li><a href="https://redoakdigital.substack.com/" target="_blank">Substack</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
   <div class="footer-copy">© 2025 Red Oak Digital. All rights reserved.</div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   // Scroll reveal
   const reveals = document.querySelectorAll('.reveal');
   const observer = new IntersectionObserver((entries) => {
@@ -1653,12 +1682,12 @@
       }).then(response => {
         if (response.ok) {
           alert('Message sent! We will be in touch.');
-          this.reset();
+          contactForm.reset();
         } else {
           alert('Something went wrong. Please try again.');
         }
       }).catch(() => {
-        alert('Network error. Please try again.');
+        alert('Something went wrong. Please try again.');
       });
     });
   }
